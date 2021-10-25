@@ -4,6 +4,9 @@
 #include "Bug.h"
 #include "Tank.h"
 
+
+#include "GameBase/Log.h"
+
 void Bullet::OnStart(Point)
 {
 }
@@ -26,6 +29,7 @@ void Bullet::OnUpdate(float dt)
 
 void Bullet::OnLifeEnd()
 {
+
 	disabled = true;
 	visible = false;
 }

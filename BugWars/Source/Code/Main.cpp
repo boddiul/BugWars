@@ -14,7 +14,6 @@ int main(int argc, const char* argv[])
 		if (argc > 1)
 			if (!strcmp(argv[1], "-lock60fps"))
 				framework.lock60fps = true;
-
 		framework.Run(game);
 	}
 	LogZA("Allocated memory: %zu", g_AllocatedMemory);
