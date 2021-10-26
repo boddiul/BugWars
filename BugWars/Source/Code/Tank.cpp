@@ -23,10 +23,6 @@ BugBase* Tank::GetBugToShoot() const
 	BugBase* targetBug = nullptr;
 
 
-
-	// Ближайший жук к игроку в данный момент. Выстрел в позицию жука тогда, когда он будет ближе к пуле
-
-
 	float minDist = std::numeric_limits<float>::max();
 
 
@@ -34,39 +30,10 @@ BugBase* Tank::GetBugToShoot() const
 	for (auto bug : g_Game->nearestBugPool)
 	{
 
-
-
-
-
 		float dist = (bug->position - position).Length2();
 		if (dist < minDist)
 		{
 			minDist = dist;
-			Point targetPosition = bug->position;
-
-			float minBulletDistance = std::numeric_limits<float>::max();
-
-
-
-			float aa = (bug->angle - 90.0f) * std::numbers::pi_v<float> / 180.0f;
-
-
-
-			int bestStep = -1;
-			for (int step = 0; step < 30; step++)
-			{
-
-				Point bugPosition = bug->position + Point(cos(aa), sin(aa)) * BugBase::s_Velocity * step * 0.5;
-				Point bulletPosition = position + (bugPosition - position).Normalized() * BulletBase::s_Velocity * step * 0.5;
-
-				float bulletDistance = (bugPosition - bulletPosition).Length2();
-				if (bulletDistance < minBulletDistance)
-				{
-					targetPosition = bugPosition;
-					minBulletDistance = bulletDistance;
-					bestStep = step;
-				}
-			}
 
 			targetBug = bug;
 		}
@@ -78,7 +45,7 @@ BugBase* Tank::GetBugToShoot() const
 
 Point Tank::CalcShootDirection(Point target_pos, Point target_dir, float target_vel, float bullet_vel) const
 {
-
+	/*
 	Point newTargetPosition = target_pos;
 	float minBulletDistance = std::numeric_limits<float>::max();
 
@@ -98,5 +65,27 @@ Point Tank::CalcShootDirection(Point target_pos, Point target_dir, float target_
 		}
 	}
 
-	return newTargetPosition - position;
+	return newTargetPosition - position;*/
+
+
+	float Vox = target_dir.Normalized().x * target_vel;
+	float Voy = target_dir.Normalized().y * target_vel;
+	
+	float Xo = target_pos.x - position.x;
+	float Yo = target_pos.y - position.y;
+
+
+	double quadA = (double)(Vox* Vox+ Voy * Voy)  -((double)bullet_vel * (double)bullet_vel);
+	double quadB = (2 * Xo * Vox + 2 * Yo * Voy);
+	double quadC = (Xo* Xo+Yo*Yo);
+
+	double d = quadB * quadB - quadA * quadC * 4.0;
+
+	float t = d >= 0 ? (-quadB-sqrt(d))/(2.0* quadA) : 0;
+
+	
+
+	return (target_pos + target_dir.Normalized() * target_vel * t)-position;
+
+
 }
