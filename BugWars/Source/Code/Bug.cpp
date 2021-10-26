@@ -2,10 +2,7 @@
 #include "Bug.h"
 #include "Game.h"
 
-
-
-#include "GameBase/Log.h"
-
+IMPLEMENT_RTTI(Bug);
 
 void Bug::OnUpdate(float dt)
 {
@@ -13,7 +10,6 @@ void Bug::OnUpdate(float dt)
 
 BugBase* Bug::FindBugToEat() const
 {
-
 	Bug* target = nullptr;
 	float min_dist = std::numeric_limits<float>::max();
 
@@ -32,7 +28,7 @@ BugBase* Bug::FindBugToEat() const
 			continue; // Can't eat that
 
 		{
-			
+
 
 			float dist = (bug->position - position).Length2();//position.Distance(bug->position);
 			if (dist < min_dist)
